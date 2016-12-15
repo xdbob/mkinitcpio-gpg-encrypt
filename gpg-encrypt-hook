@@ -73,12 +73,12 @@ EOF
                 if [ $GPG = true ]; then
                     echo "GPG key detected, trying do decrypt"
                     # Start the smartcard daemon
-                    /usr/bin/pcscd --auto-exit 2>&1 > /dev/null
+                    /usr/bin/pcscd --auto-exit &> /dev/null
 
                     test -d /.gnupg || mkdir -p /.gnupg
                     chmod -R go-rwx /etc/initcpio/gpg /.gnupg
 
-                    /usr/bin/gpg --homedir "/etc/initcpio/gpg" --card-status 2>&1 > /dev/null
+                    /usr/bin/gpg --homedir "/etc/initcpio/gpg" --card-status &> /dev/null
                     if eval /usr/bin/gpg --homedir "/etc/initcpio/gpg" --decrypt -o "/decrypted.bin" "${ckeyfile}"; then
                         ckeyfile="/decrypted.bin"
                     else
@@ -87,7 +87,7 @@ EOF
                     fi
 
                     rm -rf /etc/initcpio/gpg
-                    /bin/killall gpg-agent scdaemon pcscd
+                    /bin/killall gpg-agent scdaemon pcscd &> /dev/null
                 fi
 
                 if eval cryptsetup --key-file ${ckeyfile} open --type luks ${resolved} ${cryptname} ${cryptargs} ${CSQUIET}; then

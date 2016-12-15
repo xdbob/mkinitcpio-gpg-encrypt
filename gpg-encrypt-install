@@ -12,14 +12,14 @@ build() {
         add_all_modules '/crypto/'
     fi
 
-    if [ -d ${BUILDROOT}/etc/initcpio/gpg ]; then
+    if [ -d "${BUILDROOT}/etc/initcpio/gpg" ]; then
         echo "WARNING! /etc/initcpio/gpg exists in initramfs buildroot, deleting." > 2
         rm -rf "${BUILDROOT}/etc/initcpio/gpg"
     fi
 
     mkdir -p "${BUILDROOT}/etc/initcpio/gpg"
     chmod 0700 "${BUILDROOT}/etc/initcpio/gpg"
-    echo "pinentry-program /usr/bin/pinentry-tty" > ${BUILDROOT}/etc/initcpio/gpg/gpg-agent.conf
+    echo "pinentry-program /usr/bin/pinentry-tty" > "${BUILDROOT}/etc/initcpio/gpg/gpg-agent.conf"
 
     add_binary "cryptsetup"
     add_binary "dmsetup"
@@ -34,12 +34,11 @@ build() {
     add_file "/usr/lib/initcpio/udev/11-dm-initramfs.rules" "/usr/lib/udev/rules.d/11-dm-initramfs.rules"
 
     if [ -f /etc/private.gpg ]; then
-        gpg --homedir "${BUILDROOT}/etc/initcpio/gpg" --import /etc/private.gpg 2>&1 > /dev/null
-        if [ $? -ne 0 ]; then
-            echo "ERROR while importing private key file."
+        if ! gpg --homedir "${BUILDROOT}/etc/initcpio/gpg" --import /etc/private.gpg &> /dev/null; then
+            echo "ERROR while importing private key file." >&2
         fi
     else
-        echo "WARNING /etc/private.gpg not found."
+        echo "WARNING /etc/private.gpg not found." >&2
     fi
 
     add_runscript
