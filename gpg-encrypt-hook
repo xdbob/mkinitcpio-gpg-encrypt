@@ -11,9 +11,6 @@ run_hook() {
 $cryptkey
 EOF
 
-        if [ "${ckarg2%.gpg}" != "${ckarg2}" ]; then
-            GPG=true
-        fi
         if [ "$ckdev" = "rootfs" ]; then
             ckeyfile=$ckarg1
         elif resolved=$(resolve_device "${ckdev}" ${rootdelay}); then
@@ -32,6 +29,9 @@ EOF
                     dd if="$resolved" of="$ckeyfile" bs=1 skip="$ckarg1" count="$ckarg2" >/dev/null 2>&1
                     ;;
             esac
+        fi
+        if [ "${ckarg2%.gpg}" != "${ckarg2}" ] || [ "${ckeyfile%.gpg}" != "${ckeyfile}" ]; then
+            GPG=true
         fi
         [ ! -f ${ckeyfile} ] && echo "Keyfile could not be opened. Reverting to passphrase."
     fi
