@@ -28,6 +28,7 @@ build() {
     add_binary "pinentry-tty"
     add_binary "pcscd"
     add_binary "/usr/lib/gnupg/scdaemon"
+    add_binary "shred"
     add_file "/usr/lib/udev/rules.d/10-dm.rules"
     add_file "/usr/lib/udev/rules.d/13-dm-disk.rules"
     add_file "/usr/lib/udev/rules.d/95-dm-notify.rules"

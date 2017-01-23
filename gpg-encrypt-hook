@@ -91,6 +91,9 @@ EOF
                 fi
 
                 if eval cryptsetup --key-file ${ckeyfile} open --type luks ${resolved} ${cryptname} ${cryptargs} ${CSQUIET}; then
+                    if [ $GPG = true ]; then
+                        shred -u "/decrypted.bin" &> /dev/null
+                    fi
                     dopassphrase=0
                 else
                     echo "Invalid keyfile. Reverting to passphrase."
