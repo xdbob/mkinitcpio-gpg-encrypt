@@ -10,7 +10,7 @@ As is the case with all LUKS systems, anyone who gets root on your box after it'
 
 PGP smart cards have varying options for PIN limits and reset or self-destruct functionality - choose one that fits your needs.
 
-This hook has only been tested with the Yubikey NEO.
+This hook has been tested with the Yubikey NEO, nano and the Yubikey 4.
 
 ## Disclaimer
 
@@ -21,9 +21,9 @@ Use this hook at your own risk. It's highly recommended to have a backup key som
 1. Install Arch onto a LUKS encrypted system and get it booting using the stock `encrypt` hook and keyfile.
 1. Encrypt your keyfile with GnuPG: `gpg -r YOURKEYID -o keyfile.gpg --encrypt keyfile`.
 1. Delete/Backup/Watever your original keyfile.
-1. Update accordingly your kerner args (ie: append .gpg to the keyfile name)
-1. Export yourt private/shadow Key to /etc/private.gpg: `gpg --export-secret-keys YOURKEYID > /tmp/private.gpg && mv /tmp/private.gpg /etc`
-1. Edit `/etc/mkinitcpio.conf` and replace the `encrypt` hook with `gpg-encrypt`. Do not leave both `encrypt` and `scencrypt` enabled.
+1. Update accordingly your kernel args (ie: the keyfile name *must* end with .gpg)
+1. Export your private/shadow Key to /etc/private.gpg: `gpg --export-secret-keys YOURKEYID > /tmp/private.gpg && sudo mv /tmp/private.gpg /etc`
+1. Edit `/etc/mkinitcpio.conf` and replace the `encrypt` hook with `gpg-encrypt`. Do not leave both `encrypt` and `gpg-encrypt` enabled.
 1. Run `mkinitcpio -p linux`. If there are no errors, reboot with your smart card plugged in to find out if it works.
 
 # Technical details
