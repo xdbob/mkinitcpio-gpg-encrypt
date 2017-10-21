@@ -82,7 +82,7 @@ EOF
                     if eval /usr/bin/gpg --homedir "/etc/initcpio/gpg" --decrypt -o "/decrypted.bin" "${ckeyfile}"; then
                         ckeyfile="/decrypted.bin"
                     else
-                        echo "Failed to decrype keyfile with GPG."
+                        echo "Failed to decrypt keyfile with GPG."
                         echo "Falling back to standard keyfile."
                     fi
 
